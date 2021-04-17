@@ -64,19 +64,22 @@ public class MainController {
             @RequestParam String tag, Map<String, Object> model,
             @RequestParam("file") MultipartFile file //7й
     ) throws IOException {
-        //первым шагом мы сохраняем в БД
-        Message message = new Message(text, tag, user);
-        if (file !=null && !file.getOriginalFilename().isEmpty()){
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()){
-                uploadDir.mkdir();
+        if (text != null && !text.isEmpty() && tag != null && !tag.isEmpty()) {
+            Message message = new Message(text, tag, user);
+            if (file !=null && !file.getOriginalFilename().isEmpty()){
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()){
+                    uploadDir.mkdir();
+                }
+
+                String uuid = UUID.randomUUID().toString();
+                String resultFilename = uuid + "." + file.getOriginalFilename();
+                file.transferTo(new File( uploadPath + resultFilename));
+                message.setFilename(resultFilename);
             }
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-            message.setFilename(resultFilename);
+            //первым шагом мы сохраняем в БД
+            messageRepository.save(message);
         }
-        messageRepository.save(message);
         //далее, вторым шагом, возвращаем список сообщений, который лежит в БД
         Iterable<Message> messages = messageRepository.findAll(); //4й Добавили для "автора"
         model.put("messages", messages);
