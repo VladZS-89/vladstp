@@ -36,8 +36,8 @@ public class MainController {
         return "greeting";
     }
  */
-    @Value("${upload.path}") //7й Указываем спрингу что мы хотим получить какую-то переменную
-    private String uploadPath; //7й Вставляем в эту переменную
+    @Value("${upload.path}") //7й Спринг ищет в пропертях значение переменной по указанному в {} имени и ...
+    private String uploadPath; //7й ... Вставляем в эту переменную
 
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
@@ -63,18 +63,18 @@ public class MainController {
             @RequestParam String text,
             @RequestParam String tag, Map<String, Object> model,
             @RequestParam("file") MultipartFile file //7й
-    ) throws IOException {
+    ) throws IOException { //7й добавили через alt+ins встроке  Exception в file.transferTo(new File ...
         if (text != null && !text.isEmpty() && tag != null && !tag.isEmpty()) {
             Message message = new Message(text, tag, user);
             if (file !=null && !file.getOriginalFilename().isEmpty()){
                 File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()){
-                    uploadDir.mkdir();
+                if (!uploadDir.exists()){ // 7й проверяем есть ли директория для загрузки
+                    uploadDir.mkdir(); // 7й если нет директории то создаём
                 }
 
-                String uuid = UUID.randomUUID().toString();
-                String resultFilename = uuid + "." + file.getOriginalFilename();
-                file.transferTo(new File( uploadPath + resultFilename));
+                String uuidFile = UUID.randomUUID().toString(); //7й создаём уникальное имя файла с помощью UUID
+                String resultFilename = uuidFile + "." + file.getOriginalFilename(); //7й склеиваем UUID и имя файла = получаем уникальное имя файла
+                file.transferTo(new File( uploadPath + "/" + resultFilename)); //7й загружаем файл
                 message.setFilename(resultFilename);
             }
             //первым шагом мы сохраняем в БД
