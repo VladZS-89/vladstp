@@ -84,7 +84,7 @@ public class MainController {
         Iterable<Message> messages = messageRepository.findAll(); //4й Добавили для "автора"
         model.put("messages", messages);
         //отдали пользователю
-        return "main";
+        return "redirect:/main";
     }
     /* перенесли отработку фильтра через if в в Getmapping для работы фильтра на страничке main
     * @PostMapping("filter")
