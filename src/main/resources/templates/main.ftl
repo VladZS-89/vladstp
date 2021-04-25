@@ -23,7 +23,7 @@
                     <input type="text" class="form-control" name="tag" required placeholder="Тэг"/>
                 </div>
                 <div class="form-group">
-                    <div class="custom-life">
+                    <div class="custom-file">
                         <input type="file" name="file" id="customFile">
                         <label class="custom-file-label" for="customFile">Choose file</label>
                     </div>
