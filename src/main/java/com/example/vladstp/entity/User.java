@@ -19,8 +19,11 @@ public class User implements UserDetails {
     @ElementCollection(targetClass = Role.class, fetch=FetchType.EAGER) //Как то работает вместо таблицы ролей. ????
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-
     private Set<Role> roles;
+
+    public boolean isAdmin () {
+        return roles.contains(Role.ADMIN);
+    }
 
     public Long getId() {
         return id;
